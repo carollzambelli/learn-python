@@ -11,8 +11,7 @@ Repositório destinado ao ensino da linguagem python para iniciantes.
 2. Pandas
 3. Visualização de Dados
 4. Análise de Dados
-5. Integração e ingestão de dados
-7. ??
+5. Ingestão de dados
 
 ### Organização do repositório
 ---

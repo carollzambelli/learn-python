@@ -12,7 +12,7 @@ Sua missão é:
 - Salvar as mensagens em um arquivo em texto claro;
 - Salvar o datetime da decodificação da mensagem;
 
-<img src="../../imgs/projetos/morse.png" style="max-width:500px; "/>
+<img src="../../imgs/projetos/morse.png" style="max-width:300px; "/>
 
 Para cumprir sua missão sem levantar suspeitas você deverá realizar a decodificação através de uma ou mais funções que :
 - Recebe a mensagem como argumento;
