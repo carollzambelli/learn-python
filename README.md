@@ -16,7 +16,8 @@ Repositório destinado ao ensino da linguagem python para iniciantes.
 ### Organização do repositório
 ---
 O repositório está organizado da seguinte forma
-- Exercicios : pequenos desafios de programação para testar suas habilidades de código e raciocínio lógico ;
-- Notebooks : notebooks com exemplos dos conteúdos abordados ;
-- Projetos : aplicação dos conteúdos abordados em pequenos projetos. 
+- DESAFIOS : pequenos desafios de programação para testar suas habilidades de código e raciocínio lógico ;
+- NOTEBOOKS : notebooks com exemplos dos conteúdos abordados ;
+- PROJETOS : aplicação dos conteúdos abordados em pequenos projetos. 
 
+As imagens utilizadas nos notebooks foram extraídas de: https://pythoniluminado.netlify.app
