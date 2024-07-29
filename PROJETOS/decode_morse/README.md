@@ -20,3 +20,9 @@ Para cumprir sua missão sem levantar suspeitas você deverá realizar a decodif
 - Path do arquivo não deve estar hard coded;
 - Messagem deve ser passada através do keyboard.
 
+#### AGORA É COM VOCÊ
+Altere o projeto para receber um texto, ou seja, mais de uma palavra, sendo que:
+- As letras devem ser separadas por um espaço
+- As palavras devem ser separadas por dois espaços
+- Executar com pelo menos 3 cenários diferentes, ou seja, 3 textos
+- Você deve criar estes textos /frases de input
