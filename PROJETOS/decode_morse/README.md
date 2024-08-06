@@ -20,6 +20,24 @@ Para cumprir sua missão sem levantar suspeitas você deverá realizar a decodif
 - Path do arquivo não deve estar hard coded;
 - Messagem deve ser passada através do keyboard.
 
+### Como utilizar:
+
+1. Crie um ambiente virtual
+```
+python -m venv env
+```
+2. Ative o ambiente virtual
+3. Instale o requirements (se necessário)
+```
+pip install -r requirements.txt
+```
+4. Execute o script passando a mensagem em morse
+```
+python decode_morse.py '-.-. .- .-. --- .-.. .. -. .-'
+```
+
+----
+
 #### AGORA É COM VOCÊ
 Altere o projeto para receber um texto, ou seja, mais de uma palavra, sendo que:
 - As letras devem ser separadas por um espaço
