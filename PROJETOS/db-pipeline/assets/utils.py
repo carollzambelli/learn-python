@@ -62,6 +62,8 @@ def convert_data_type(df, tipos_map):
             data[col] = data[col].astype(float)
         elif tipo == "datetime":
             data[col] = pd.to_datetime(data[col])
+        elif tipo == "string":
+            data[col] = data[col].astype(str)
     return data
 
 
@@ -103,7 +105,7 @@ def keys_check(df, cols_chaves):
 # Funções auxiliares -------------------------------------------
 
 def padroniza_str(obs):
-    return re.sub('[^A-Za-z0-9]+', '', obs.lower())
+    return re.sub('[^A-Za-z0-9]+', '', obs.upper())
 
 
 def corrige_hora(hr_str, dct_hora = {1:"000?",2:"00?",3:"0?",4:"?"}):
