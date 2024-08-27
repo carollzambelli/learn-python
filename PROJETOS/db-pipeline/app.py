@@ -14,16 +14,20 @@ def data_clean(df, metadados):
     INPUT: Pandas DataFrame, dicionário de metadados
     OUTPUT: Pandas DataFrame, base tratada
     '''
+    df["data_voo"] = pd.to_datetime(df[['year', 'month', 'day']]) 
     df = utils.null_exclude(df, metadados["cols_chaves"])
+    df = utils.convert_data_type(df, metadados["tipos_originais"])
     df = utils.select_rename(df, metadados["cols_originais"], metadados["cols_renamed"])
-    df = utils.convert_data_type(df, metadados["tipos_map"])
     df = utils.string_std(df, metadados["std_str"])
 
-    df["data_voo"] = pd.to_datetime(df[['year', 'month', 'day']]) 
+    df.loc[:,"datetime_partida"] = df.loc[:,"datetime_partida"].str.replace('.0', '')
+    df.loc[:,"datetime_chegada"] = df.loc[:,"datetime_chegada"].str.replace('.0', '')
+
     for col in metadados["corrige_hr"]:
         lst_col = df.loc[:,col].apply(lambda x: utils.corrige_hora(x))
         df[f'{col}_formatted'] = pd.to_datetime(df.loc[:,'data_voo'].astype(str) + " " + lst_col)
-
+    
+    logger.info(f'Saneamento concluído; {datetime.datetime.now()}')
     return df
 
 def feat_eng(df):
@@ -32,6 +36,7 @@ def feat_eng(df):
     INPUT: ???????????????????????????
     OUTPUT: ???????????????????????????
     '''
+    #colocar log info
     pass
 
 def save_data_sqlite(df):
@@ -43,6 +48,7 @@ def save_data_sqlite(df):
     c = conn.cursor()
     df.to_sql('nyflights', con=conn, if_exists='replace')
     conn.commit()
+    logger.info(f'Dados salvos com sucesso; {datetime.datetime.now()}')
     conn.close()
 
 def fetch_sqlite_data(table):
@@ -59,17 +65,13 @@ def fetch_sqlite_data(table):
 
 
 if __name__ == "__main__":
-    
     logger.info(f'Inicio da execução ; {datetime.datetime.now()}')
     metadados  = utils.read_metadado(os.getenv('META_PATH'))
     df = pd.read_csv(os.getenv('DATA_PATH'),index_col=0)
-    utils.null_check(df, metadados["null_tolerance"])
-    # Insira um logger.info
     df = data_clean(df, metadados)
-    # Insira um logger.info
+    utils.null_check(df, metadados["null_tolerance"])
     utils.keys_check(df, metadados["cols_chaves"])
     df = feat_eng(df)
-    save_data_sqlite(df)
-    logger.info(f'Dados salvos com sucesso; {datetime.datetime.now()}')
+    #save_data_sqlite(df)
     fetch_sqlite_data(metadados["tabela"][0])
     logger.info(f'Fim da execução ; {datetime.datetime.now()}')
