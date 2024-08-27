@@ -15,7 +15,6 @@ destino = "IAH"
 #destino = routes[origem]
 
 def ingest_api(metadados, key, origem, destino):
-  '''
    api_result = requests.get(
       metadados["path"],
       params = {
@@ -25,10 +24,8 @@ def ingest_api(metadados, key, origem, destino):
         #"limit" : 1
       })
    api_response = api_result.json()
-   '''
- 
-   with open('data/amostra.json', 'r') as file:
-      api_response = json.loads(file.read())
+   #with open('data/amostra.json', 'r') as file:
+   #   api_response = json.loads(file.read())
    df = pd.json_normalize(api_response["data"])
    return df
 
