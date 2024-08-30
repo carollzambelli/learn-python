@@ -22,9 +22,8 @@ def ingest_api(metadados, key, origem, destino):
         'access_key': key,
         "dep_iata" : origem,
         "arr_iata" : destino
-        #"limit" : 10
+        "limit" : 5
       })
-   
    api_response = api_result.json()
    '''
    with open('data/amostra.json', 'r') as file:
@@ -39,7 +38,7 @@ def data_clean(df, metadados):
     df = utils.string_std(df, metadados["std_str"])
     return df
 
-def calc_features(df, origem, destino, table, db):
+def feat_eng(df, origem, destino, table, db):
    data = df.copy()
    data["tempo_voo_esperado"] = (data["datetime_chegada_formatted"] - \
                                  data["datetime_partida_formatted"]
@@ -50,7 +49,6 @@ def calc_features(df, origem, destino, table, db):
                          .dt.hour.apply(lambda x: utils.classifica_hora(x))
    return data[cols_pre_proc]
 
-
 def aplica_modelo(df, filename):
    df_processed = utils.pre_process(df)
    cols_missing = set(cols_modelo) - set(df_processed.columns)
@@ -60,10 +58,10 @@ def aplica_modelo(df, filename):
    predict = clf_reg.predict(df_processed)
    return predict
 
+
 if __name__ == "__main__":
    df = ingest_api(api_metadados, os.getenv('ACCESS_KEY'), origem, destino)
    df = data_clean(df, api_metadados)
-   df = calc_features(df, origem, destino, "nyflights", "data/NyflightsDB.db")
+   df = feat_eng(df, origem, destino, "nyflights", "data/NyflightsDB.db")
    pred = aplica_modelo(df, "assets/reg_model.sav")
    print(pred)
-

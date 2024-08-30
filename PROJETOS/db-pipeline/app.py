@@ -69,6 +69,7 @@ if __name__ == "__main__":
     metadados  = utils.read_metadado(os.getenv('META_PATH'))
     df = pd.read_csv(os.getenv('DATA_PATH'),index_col=0)
     df = data_clean(df, metadados)
+    print(df.head())
     utils.null_check(df, metadados["null_tolerance"])
     utils.keys_check(df, metadados["cols_chaves"])
     df = feat_eng(df)
