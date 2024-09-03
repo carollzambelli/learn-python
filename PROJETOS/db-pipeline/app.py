@@ -4,6 +4,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import assets.utils as utils
 from assets.utils import logger
+from assets.config import api_metadados, routes, cols_modelo, cols_pre_proc
 import datetime
 
 load_dotenv()
@@ -32,12 +33,21 @@ def data_clean(df, metadados):
 
 def feat_eng(df):
     '''
-    Função ???????????????????????????
-    INPUT: ???????????????????????????
-    OUTPUT: ???????????????????????????
+    Cria novas colunas
     '''
-    #colocar log info
-    pass
+
+    df = df.dropna(subset=['tempo_voo'])
+    df['tempo_voo_esperado'] = df['tempo_voo'].astype(int).apply(lambda x: f"{x // 100:02d}:{x % 100:02d}")
+    df['tempo_voo_hr'] = df['tempo_voo_esperado'].apply(lambda x: int(x.split(':')[0]) + int(x.split(':')[1]) / 60)
+    df['atraso'] = (pd.to_datetime(df['datetime_chegada_formatted'], format='%d/%m/%Y %H:%M:%S') - pd.to_datetime(df['datetime_partida_formatted'], format='%d/%m/%Y %H:%M:%S')).dt.total_seconds() / 60 - df['tempo_voo']
+    df['atraso'] = df['atraso'].apply(lambda x: max(x, 0))
+    df['dia_semana'] = pd.to_datetime(df['data_voo'], format='%Y-%m-%d').dt.day_name()
+    df['horario'] = pd.Timestamp.now()
+    df['flg_status'] = pd.to_datetime(df['datetime_chegada_formatted'], format='%Y-%m-%d %H:%M:%S').apply(lambda x: 'Em trânsito' if x > pd.Timestamp.now() else 'Chegou ao destino')
+
+    logger.info(f'Iplementação feat_eng; {datetime.datetime.now()}')
+    return df
+   
 
 def save_data_sqlite(df):
     try:
@@ -72,7 +82,9 @@ if __name__ == "__main__":
     print(df.head())
     utils.null_check(df, metadados["null_tolerance"])
     utils.keys_check(df, metadados["cols_chaves"])
+    df = df.head(10)
     df = feat_eng(df)
-    #save_data_sqlite(df)
-    fetch_sqlite_data(metadados["tabela"][0])
+    df.to_excel('seu_arquivo.xlsx', index=False)
+    save_data_sqlite(df)
+    fetch_sqlite_data('nyflights')
     logger.info(f'Fim da execução ; {datetime.datetime.now()}')
